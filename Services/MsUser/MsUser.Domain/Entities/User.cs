@@ -1,4 +1,4 @@
-﻿namespace MsItem.Domain.Entities;
+﻿namespace MsUser.Domain.Entities;
 
 
 /// <summary>
