@@ -1,6 +1,6 @@
-@MsItem.API_HostAddress = http://localhost:5025
+@MsItem.API_HostAddress = http://localhost:5189
 
-GET {{MsItem.API_HostAddress}}/weatherforecast/
+GET {{MsItem.API_HostAddress}}/api/workitems/
 Accept: application/json
 
 ###
