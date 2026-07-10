@@ -7,4 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MsItem.Application.Features.WorkItems.Queries.GetPendingWorkItems;
+
+/// <summary>
+/// Consulta que obtiene los ítems de trabajo pendientes de asignación (sin usuario asignado).
+/// </summary>
 public sealed record GetPendingWorkItemsQuery : IQuery<List<WorkItemResponse>>;

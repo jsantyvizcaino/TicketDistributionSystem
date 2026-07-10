@@ -18,8 +18,14 @@ using System.Threading.Tasks;
 
 namespace MsItem.Infrastructure;
 
+/// <summary>
+/// Registro de dependencias de la capa Infrastructure de MsItem.
+/// </summary>
 public static class DependencyInjection
 {
+    /// <summary>
+    /// Registra los repositorios, las estrategias de distribución y el cliente HTTP hacia MsUser.
+    /// </summary>
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<IWorkItemRepository, WorkItemRepository>();
@@ -30,6 +36,11 @@ public static class DependencyInjection
         return services;
     }
 
+    /// <summary>
+    /// Registra las implementaciones de <see cref="IDistributionStrategy"/> (Urgent, HighRelevance
+    /// y Default, en ese orden de precedencia), el <see cref="DistributionContext"/> y el
+    /// <see cref="IDistributionService"/>.
+    /// </summary>
     private static IServiceCollection AddDistributionStrategies(this IServiceCollection services)
     {
         services.AddScoped<IDistributionStrategy, UrgentStrategy>();
@@ -41,6 +52,11 @@ public static class DependencyInjection
         return services;
     }
 
+    /// <summary>
+    /// Registra el cliente HTTP hacia MsUser según el proveedor configurado en
+    /// <c>HttpClient:Provider</c> ("refit" o "native"), usando <see cref="HttpClientProviderFactory"/>
+    /// para resolver la implementación de <see cref="IUserApiClient"/> en tiempo de ejecución.
+    /// </summary>
     private static IServiceCollection AddUserApiClient(this IServiceCollection services, IConfiguration configuration)
     {
         var baseAddress = configuration["Services:MsUser"]

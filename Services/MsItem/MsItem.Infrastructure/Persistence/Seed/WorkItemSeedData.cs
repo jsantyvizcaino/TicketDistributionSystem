@@ -3,8 +3,15 @@ using MsItem.Domain.Entities;
 using MsItem.Domain.Enums;
 
 namespace MsItem.Infrastructure.Persistence.Seed;
+
+/// <summary>
+/// Datos semilla de ítems de trabajo de ejemplo para el entorno de desarrollo.
+/// </summary>
 public static class WorkItemSeedData
 {
+    /// <summary>
+    /// Inserta ítems de trabajo de ejemplo si la tabla está vacía (operación idempotente).
+    /// </summary>
     public static async Task EnsureDefaultWorkItemsAsync(AppDbContext context, CancellationToken ct = default)
     {
         if (await context.WorkItems.AnyAsync(ct))
