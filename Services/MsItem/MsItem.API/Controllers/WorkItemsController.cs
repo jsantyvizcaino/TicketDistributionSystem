@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MsItem.Application.Features.WorkItems.Commands.AssignWorkItem;
 using MsItem.Application.Features.WorkItems.Commands.CompleteWorkItem;
 using MsItem.Application.Features.WorkItems.Commands.CreateWorkItem;
+using MsItem.Application.Features.WorkItems.Commands.DistributeWorkItem;
 using MsItem.Application.Features.WorkItems.Commands.UpdateWorkItem;
 using MsItem.Application.Features.WorkItems.Queries.GetAllWorkItems;
 using MsItem.Application.Features.WorkItems.Queries.GetPendingWorkItems;
@@ -86,6 +87,15 @@ public class WorkItemsController(
         Logger.LogInformation("{Method}: id={Id}", nameof(Complete), id);
 
         var result = await mediator.Send(new CompleteWorkItemCommand(id));
+        return Ok(result);
+    }
+
+    [HttpPost("{id:guid}/distribute")]
+    public async Task<IActionResult> Distribute(Guid id)
+    {
+        Logger.LogInformation("{Method}: id={Id}", nameof(Distribute), id);
+
+        var result = await mediator.Send(new DistributeWorkItemCommand(id));
         return Ok(result);
     }
 }
