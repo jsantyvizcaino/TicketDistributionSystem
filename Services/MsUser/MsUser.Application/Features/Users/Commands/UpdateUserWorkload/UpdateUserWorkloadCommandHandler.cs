@@ -1,4 +1,4 @@
-﻿using Mediator;
+using Mediator;
 using MsUser.Application.Features.Users.DTOs;
 using MsUser.Domain.Interfaces.Repositories;
 using System;
@@ -8,12 +8,20 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MsUser.Application.Features.Users.Commands.UpdateUserWorkload;
+
+/// <summary>
+/// Maneja la actualización incremental de los contadores de carga de trabajo de un usuario.
+/// </summary>
 public sealed class UpdateUserWorkloadCommandHandler : ICommandHandler<UpdateUserWorkloadCommand, UserResponse>
 {
     private readonly IUserRepository _repository;
 
     public UpdateUserWorkloadCommandHandler(IUserRepository repository) => _repository = repository;
 
+    /// <summary>
+    /// Ejecuta el comando: busca al usuario por nombre de usuario, aplica los incrementos
+    /// recibidos (y, si corresponde, mueve un ítem pendiente a completado) y persiste el cambio.
+    /// </summary>
     public async ValueTask<UserResponse> Handle(UpdateUserWorkloadCommand command, CancellationToken ct)
     {
         var user = await _repository.GetByUsernameAsync(command.Username, ct)

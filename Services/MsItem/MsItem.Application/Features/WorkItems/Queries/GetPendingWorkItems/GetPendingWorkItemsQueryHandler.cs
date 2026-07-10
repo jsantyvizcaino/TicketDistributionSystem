@@ -8,12 +8,19 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MsItem.Application.Features.WorkItems.Queries.GetPendingWorkItems;
+
+/// <summary>
+/// Maneja la obtención de los ítems de trabajo pendientes de asignación.
+/// </summary>
 public sealed class GetPendingWorkItemsQueryHandler : IQueryHandler<GetPendingWorkItemsQuery, List<WorkItemResponse>>
 {
     private readonly IWorkItemRepository _repository;
 
     public GetPendingWorkItemsQueryHandler(IWorkItemRepository repository) => _repository = repository;
 
+    /// <summary>
+    /// Ejecuta la consulta y devuelve los ítems pendientes de asignación.
+    /// </summary>
     public async ValueTask<List<WorkItemResponse>> Handle(GetPendingWorkItemsQuery query, CancellationToken ct)
     {
         var workItems = await _repository.GetPendingAsync(ct);

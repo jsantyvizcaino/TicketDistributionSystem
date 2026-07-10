@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using MsUser.Domain.Entities;
 using MsUser.Infrastructure.Persistence.Configurations;
 using MsUser.Infrastructure.Persistence.Seed;
@@ -20,8 +20,14 @@ public class AppDbContext : DbContext
     {
     }
 
+    /// <summary>
+    /// Conjunto de usuarios persistidos.
+    /// </summary>
     public DbSet<User> Users { get; set; }
 
+    /// <summary>
+    /// Aplica las configuraciones de todas las entidades del contexto.
+    /// </summary>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

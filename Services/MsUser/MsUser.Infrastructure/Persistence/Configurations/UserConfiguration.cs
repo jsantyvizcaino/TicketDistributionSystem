@@ -1,11 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MsUser.Domain.Entities;
 
 namespace MsUser.Infrastructure.Persistence.Configurations;
 
+/// <summary>
+/// Configuración de Fluent API para la entidad <see cref="User"/>:
+/// clave primaria, restricciones de longitud, valores por defecto e índices.
+/// </summary>
 public class UserConfiguration : IEntityTypeConfiguration<User>
 {
+    /// <summary>
+    /// Configura el mapeo de <see cref="User"/> a la tabla de base de datos.
+    /// </summary>
     public void Configure(EntityTypeBuilder<User> builder)
     {
         builder.HasKey(u => u.Id);

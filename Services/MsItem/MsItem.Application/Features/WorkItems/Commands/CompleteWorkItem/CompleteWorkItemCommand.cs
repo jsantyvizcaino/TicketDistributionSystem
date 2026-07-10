@@ -7,6 +7,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MsItem.Application.Features.WorkItems.Commands.CompleteWorkItem;
+
+/// <summary>
+/// Comando para marcar un ítem de trabajo como completado.
+/// </summary>
 public sealed record CompleteWorkItemCommand(
     Guid WorkItemId
 ) : ICommand<WorkItemResponse>;

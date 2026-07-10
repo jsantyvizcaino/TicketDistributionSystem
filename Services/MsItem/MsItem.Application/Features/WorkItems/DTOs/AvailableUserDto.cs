@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System;
 
 namespace MsItem.Application.Features.WorkItems.DTOs;
+
+/// <summary>
+/// Representación de un usuario disponible para distribución, obtenida desde MsUser
+/// (vía <c>IUserApiClient</c>) para ser evaluada por las estrategias de distribución.
+/// </summary>
 public sealed record AvailableUserDto(
     Guid Id,
     string Username,

@@ -10,12 +10,19 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MsItem.Application.Features.WorkItems.Commands.CreateWorkItem;
+
+/// <summary>
+/// Maneja la creación de un ítem de trabajo sin asignar.
+/// </summary>
 public sealed class CreateWorkItemCommandHandler : ICommandHandler<CreateWorkItemCommand, WorkItemResponse>
 {
     private readonly IWorkItemRepository _repository;
 
     public CreateWorkItemCommandHandler(IWorkItemRepository repository) => _repository = repository;
 
+    /// <summary>
+    /// Ejecuta el comando: crea el ítem en estado <see cref="WorkItemStatus.Pending"/> y lo persiste.
+    /// </summary>
     public async ValueTask<WorkItemResponse> Handle(CreateWorkItemCommand command, CancellationToken ct)
     {
         var workItem = new WorkItem

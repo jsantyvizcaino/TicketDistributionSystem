@@ -8,6 +8,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MsItem.Application.Features.WorkItems.Commands.CreateWorkItem;
+
+/// <summary>
+/// Comando para crear un nuevo ítem de trabajo sin asignar (queda en estado <c>Pending</c>).
+/// </summary>
 public sealed record CreateWorkItemCommand(
     string Title,
     string Description,

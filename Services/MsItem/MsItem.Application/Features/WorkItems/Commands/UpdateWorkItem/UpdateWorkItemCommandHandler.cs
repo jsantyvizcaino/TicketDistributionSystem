@@ -8,12 +8,19 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MsItem.Application.Features.WorkItems.Commands.UpdateWorkItem;
+
+/// <summary>
+/// Maneja la actualización de los datos editables de un ítem de trabajo.
+/// </summary>
 public sealed class UpdateWorkItemCommandHandler : ICommandHandler<UpdateWorkItemCommand, WorkItemResponse>
 {
     private readonly IWorkItemRepository _repository;
 
     public UpdateWorkItemCommandHandler(IWorkItemRepository repository) => _repository = repository;
 
+    /// <summary>
+    /// Ejecuta el comando: busca el ítem y actualiza título, descripción, relevancia y fecha límite.
+    /// </summary>
     public async ValueTask<WorkItemResponse> Handle(UpdateWorkItemCommand command, CancellationToken ct)
     {
         var workItem = await _repository.GetByIdAsync(command.WorkItemId, ct)

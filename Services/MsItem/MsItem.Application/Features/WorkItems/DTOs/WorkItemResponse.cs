@@ -6,6 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MsItem.Application.Features.WorkItems.DTOs;
+
+/// <summary>
+/// Representación de un ítem de trabajo expuesta por la API de MsItem.
+/// </summary>
 public sealed record WorkItemResponse(
     Guid Id,
     string Title,

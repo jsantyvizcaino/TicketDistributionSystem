@@ -8,18 +8,24 @@ using System.Threading.Tasks;
 
 namespace MsItem.Infrastructure.Http.Providers.Native;
 
+/// <summary>
+/// Implementación de <see cref="IUserApiClient"/> basada en <see cref="HttpClient"/> nativo
+/// (registrado vía <c>IHttpClientFactory</c>), como alternativa a Refit.
+/// </summary>
 public sealed class NativeUserApiClient : IUserApiClient
 {
     private readonly HttpClient _httpClient;
 
     public NativeUserApiClient(HttpClient httpClient) => _httpClient = httpClient;
 
+    /// <inheritdoc />
     public async Task<List<AvailableUserDto>> GetAvailableUsersAsync(CancellationToken ct = default)
     {
         var result = await _httpClient.GetFromJsonAsync<List<AvailableUserDto>>("/api/users/available", ct);
         return result ?? [];
     }
 
+    /// <inheritdoc />
     public async Task UpdateUserWorkloadAsync(string username, UpdateUserWorkloadDto dto, CancellationToken ct = default)
     {
         var response = await _httpClient.PutAsJsonAsync($"/api/users/{username}/workload", dto, ct);
