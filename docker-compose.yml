@@ -11,5 +11,33 @@ services:
     volumes:
       - sqlserver-data:/var/opt/mssql
 
+  msuser:
+    build:
+      context: .
+      dockerfile: Services/MsUser/MsUser.API/Dockerfile
+    container_name: msuser-api
+    ports:
+      - "5188:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=MsUsersDb;User Id=sa;Password=Ticket@2025!;TrustServerCertificate=True
+    depends_on:
+      - sqlserver
+
+  msitem:
+    build:
+      context: .
+      dockerfile: Services/MsItem/MsItem.API/Dockerfile
+    container_name: msitem-api
+    ports:
+      - "5189:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=MsItemsDb;User Id=sa;Password=Ticket@2025!;TrustServerCertificate=True
+      - Services__MsUser=http://msuser:8080
+    depends_on:
+      - sqlserver
+      - msuser
+
 volumes:
   sqlserver-data:

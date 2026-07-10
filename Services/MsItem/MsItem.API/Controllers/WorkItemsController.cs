@@ -7,6 +7,7 @@ using MsItem.Application.Features.WorkItems.Commands.DistributeWorkItem;
 using MsItem.Application.Features.WorkItems.Commands.UpdateWorkItem;
 using MsItem.Application.Features.WorkItems.Queries.GetAllWorkItems;
 using MsItem.Application.Features.WorkItems.Queries.GetPendingWorkItems;
+using MsItem.Application.Features.WorkItems.Queries.GetSortedPendingByUser;
 using MsItem.Application.Features.WorkItems.Queries.GetWorkItemById;
 using MsItem.Application.Features.WorkItems.Queries.GetWorkItemsByUsername;
 
@@ -96,6 +97,15 @@ public class WorkItemsController(
         Logger.LogInformation("{Method}: id={Id}", nameof(Distribute), id);
 
         var result = await mediator.Send(new DistributeWorkItemCommand(id));
+        return Ok(result);
+    }
+
+    [HttpGet("pending/{username}")]
+    public async Task<IActionResult> GetSortedPending(string username)
+    {
+        Logger.LogInformation("{Method}: username={Username}", nameof(GetSortedPending), username);
+
+        var result = await mediator.Send(new GetSortedPendingByUserQuery(username));
         return Ok(result);
     }
 }
