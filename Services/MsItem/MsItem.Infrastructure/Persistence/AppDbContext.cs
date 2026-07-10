@@ -19,8 +19,14 @@ public class AppDbContext : DbContext
     {
     }
 
+    /// <summary>
+    /// Conjunto de ítems de trabajo persistidos.
+    /// </summary>
     public DbSet<WorkItem> WorkItems { get; set; }
 
+    /// <summary>
+    /// Aplica las configuraciones de Fluent API de todas las entidades del contexto.
+    /// </summary>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

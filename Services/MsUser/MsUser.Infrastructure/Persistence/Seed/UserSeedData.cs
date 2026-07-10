@@ -1,9 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using MsUser.Domain.Entities;
 
 namespace MsUser.Infrastructure.Persistence.Seed;
+
+/// <summary>
+/// Datos semilla de usuarios de ejemplo para el entorno de desarrollo.
+/// </summary>
 public static class UserSeedData
 {
+    /// <summary>
+    /// Inserta usuarios de ejemplo si la tabla está vacía (operación idempotente).
+    /// </summary>
     public static async Task EnsureDefaultUsersAsync(AppDbContext context, CancellationToken ct = default)
     {
         if (await context.Users.AnyAsync(ct))

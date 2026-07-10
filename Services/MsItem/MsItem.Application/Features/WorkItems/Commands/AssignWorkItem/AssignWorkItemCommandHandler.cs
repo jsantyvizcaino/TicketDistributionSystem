@@ -9,12 +9,19 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MsItem.Application.Features.WorkItems.Commands.AssignWorkItem;
+
+/// <summary>
+/// Maneja la asignación manual de un ítem de trabajo a un usuario.
+/// </summary>
 public sealed class AssignWorkItemCommandHandler : ICommandHandler<AssignWorkItemCommand, WorkItemResponse>
 {
     private readonly IWorkItemRepository _repository;
 
     public AssignWorkItemCommandHandler(IWorkItemRepository repository) => _repository = repository;
 
+    /// <summary>
+    /// Ejecuta el comando: busca el ítem, lo asigna al usuario indicado y lo marca como <c>InProgress</c>.
+    /// </summary>
     public async ValueTask<WorkItemResponse> Handle(AssignWorkItemCommand command, CancellationToken ct)
     {
         var workItem = await _repository.GetByIdAsync(command.WorkItemId, ct)

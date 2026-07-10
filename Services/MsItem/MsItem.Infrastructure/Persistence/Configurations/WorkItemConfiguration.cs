@@ -4,8 +4,15 @@ using MsItem.Domain.Entities;
 
 namespace MsItem.Infrastructure.Persistence.Configurations;
 
+/// <summary>
+/// Configuración de Fluent API para la entidad <see cref="WorkItem"/>:
+/// clave primaria, restricciones de longitud, conversión de enums e índices.
+/// </summary>
 public class WorkItemConfiguration : IEntityTypeConfiguration<WorkItem>
 {
+    /// <summary>
+    /// Configura el mapeo de <see cref="WorkItem"/> a la tabla de base de datos.
+    /// </summary>
     public void Configure(EntityTypeBuilder<WorkItem> builder)
     {
         builder.HasKey(w => w.Id);

@@ -9,12 +9,19 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MsItem.Application.Features.WorkItems.Commands.CompleteWorkItem;
+
+/// <summary>
+/// Maneja la finalización de un ítem de trabajo.
+/// </summary>
 public sealed class CompleteWorkItemCommandHandler : ICommandHandler<CompleteWorkItemCommand, WorkItemResponse>
 {
     private readonly IWorkItemRepository _repository;
 
     public CompleteWorkItemCommandHandler(IWorkItemRepository repository) => _repository = repository;
 
+    /// <summary>
+    /// Ejecuta el comando: busca el ítem y lo marca como <see cref="WorkItemStatus.Completed"/>.
+    /// </summary>
     public async ValueTask<WorkItemResponse> Handle(CompleteWorkItemCommand command, CancellationToken ct)
     {
         var workItem = await _repository.GetByIdAsync(command.WorkItemId, ct)

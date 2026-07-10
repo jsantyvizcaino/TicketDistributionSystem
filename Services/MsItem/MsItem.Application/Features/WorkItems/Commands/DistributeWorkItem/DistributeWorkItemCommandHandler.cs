@@ -10,18 +10,35 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace MsItem.Application.Features.WorkItems.Commands.DistributeWorkItem;
-public sealed class DistributeWorkItemCommandHandler : ICommandHandler<DistributeWorkItemCommand, WorkItemResponse>
+
+/// <summary>
+/// Maneja la distribución de un ítem de trabajo: lo asigna a un usuario disponible
+/// mediante <see cref="IDistributionService"/> y, tras persistir la asignación,
+/// recalcula y devuelve la cola de pendientes ordenada del usuario asignado.
+/// </summary>
+public sealed class DistributeWorkItemCommandHandler : ICommandHandler<DistributeWorkItemCommand, DistributeWorkItemResponse>
 {
     private readonly IWorkItemRepository _repository;
     private readonly IDistributionService _distributionService;
+    private readonly IMediator _mediator;
 
-    public DistributeWorkItemCommandHandler(IWorkItemRepository repository, IDistributionService distributionService)
+    public DistributeWorkItemCommandHandler(
+        IWorkItemRepository repository,
+        IDistributionService distributionService,
+        IMediator mediator)
     {
         _repository = repository;
         _distributionService = distributionService;
+        _mediator = mediator;
     }
 
-    public async ValueTask<WorkItemResponse> Handle(DistributeWorkItemCommand command, CancellationToken ct)
+    /// <summary>
+    /// Ejecuta el comando: valida que el ítem exista y no esté ya asignado, delega la selección
+    /// de usuario en el servicio de distribución, persiste el cambio y, después de guardar,
+    /// consulta y ordena (por fecha límite ascendente y relevancia descendente) los ítems
+    /// pendientes/en progreso del usuario recién asignado.
+    /// </summary>
+    public async ValueTask<DistributeWorkItemResponse> Handle(DistributeWorkItemCommand command, CancellationToken ct)
     {
         var workItem = await _repository.GetByIdAsync(command.WorkItemId, ct)
             ?? throw new KeyNotFoundException($"Ítem de trabajo {command.WorkItemId} no encontrado");
@@ -39,8 +56,11 @@ public sealed class DistributeWorkItemCommandHandler : ICommandHandler<Distribut
         _repository.Update(workItem);
         await _repository.SaveChangesAsync(ct);
 
+        // Después de persistir la asignación, se recalcula el orden de la cola de trabajo
+        // del usuario asignado (fecha límite ascendente, relevancia descendente).
+        var sortedPendingItems = await _mediator.Send(new GetSortedPendingByUserQuery(username), ct);
 
-        return new WorkItemResponse(
+        var assignedItem = new WorkItemResponse(
             workItem.Id,
             workItem.Title,
             workItem.Description,
@@ -51,5 +71,7 @@ public sealed class DistributeWorkItemCommandHandler : ICommandHandler<Distribut
             workItem.AssignedAt,
             workItem.CompletedAt
         );
+
+        return new DistributeWorkItemResponse(assignedItem, sortedPendingItems);
     }
 }

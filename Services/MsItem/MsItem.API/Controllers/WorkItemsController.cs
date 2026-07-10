@@ -13,10 +13,18 @@ using MsItem.Application.Features.WorkItems.Queries.GetWorkItemsByUsername;
 
 namespace MsItem.API.Controllers;
 
+/// <summary>
+/// Expone las operaciones HTTP sobre ítems de trabajo: creación, consulta, actualización,
+/// asignación manual, finalización y distribución automática.
+/// Delega toda la lógica de negocio en los Commands/Queries manejados vía Mediator.
+/// </summary>
 public class WorkItemsController(
     ILoggerFactory loggerFactory,
     IMediator mediator) : BaseController(loggerFactory)
 {
+    /// <summary>
+    /// Crea un nuevo ítem de trabajo sin asignar.
+    /// </summary>
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateWorkItemCommand command)
     {
@@ -26,6 +34,9 @@ public class WorkItemsController(
         return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
     }
 
+    /// <summary>
+    /// Obtiene todos los ítems de trabajo registrados.
+    /// </summary>
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
@@ -35,6 +46,9 @@ public class WorkItemsController(
         return Ok(result);
     }
 
+    /// <summary>
+    /// Obtiene un ítem de trabajo por su identificador.
+    /// </summary>
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(Guid id)
     {
@@ -44,6 +58,9 @@ public class WorkItemsController(
         return Ok(result);
     }
 
+    /// <summary>
+    /// Obtiene los ítems de trabajo pendientes de asignación.
+    /// </summary>
     [HttpGet("pending")]
     public async Task<IActionResult> GetPending()
     {
@@ -53,6 +70,9 @@ public class WorkItemsController(
         return Ok(result);
     }
 
+    /// <summary>
+    /// Obtiene los ítems de trabajo asignados a un usuario específico.
+    /// </summary>
     [HttpGet("user/{username}")]
     public async Task<IActionResult> GetByUsername(string username)
     {
@@ -62,6 +82,9 @@ public class WorkItemsController(
         return Ok(result);
     }
 
+    /// <summary>
+    /// Actualiza los datos editables de un ítem de trabajo.
+    /// </summary>
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateWorkItemCommand command)
     {
@@ -72,6 +95,9 @@ public class WorkItemsController(
         return Ok(result);
     }
 
+    /// <summary>
+    /// Asigna manualmente un ítem de trabajo a un usuario.
+    /// </summary>
     [HttpPut("{id:guid}/assign")]
     public async Task<IActionResult> Assign(Guid id, [FromBody] AssignWorkItemCommand command)
     {
@@ -82,6 +108,9 @@ public class WorkItemsController(
         return Ok(result);
     }
 
+    /// <summary>
+    /// Marca un ítem de trabajo como completado.
+    /// </summary>
     [HttpPut("{id:guid}/complete")]
     public async Task<IActionResult> Complete(Guid id)
     {
@@ -91,6 +120,10 @@ public class WorkItemsController(
         return Ok(result);
     }
 
+    /// <summary>
+    /// Distribuye automáticamente un ítem de trabajo pendiente a un usuario disponible,
+    /// aplicando las estrategias de distribución configuradas.
+    /// </summary>
     [HttpPost("{id:guid}/distribute")]
     public async Task<IActionResult> Distribute(Guid id)
     {
@@ -100,6 +133,10 @@ public class WorkItemsController(
         return Ok(result);
     }
 
+    /// <summary>
+    /// Obtiene la cola de ítems pendientes/en progreso de un usuario, ordenada por fecha
+    /// límite ascendente y relevancia descendente.
+    /// </summary>
     [HttpGet("pending/{username}")]
     public async Task<IActionResult> GetSortedPending(string username)
     {
