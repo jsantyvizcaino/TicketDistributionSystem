@@ -1,5 +1,6 @@
 using Mediator;
 using MsItem.Application.Features.WorkItems.DTOs;
+using MsItem.Application.Features.WorkItems.Queries.GetSortedPendingByUser;
 using MsItem.Application.Features.WorkItems.Services;
 using MsItem.Domain.Enums;
 using MsItem.Domain.Interfaces.Repositories;
@@ -37,6 +38,7 @@ public sealed class DistributeWorkItemCommandHandler : ICommandHandler<Distribut
 
         _repository.Update(workItem);
         await _repository.SaveChangesAsync(ct);
+
 
         return new WorkItemResponse(
             workItem.Id,
